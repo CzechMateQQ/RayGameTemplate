@@ -1,44 +1,41 @@
-﻿using Raylib;
+﻿
+using Raylib;
 using rl = Raylib.Raylib;
 
-namespace ConsoleApp1
+namespace MatrixHeirarchy
 {
     static class Program
     {
         public static int Main()
         {
+            Game game = new Game();
             // Initialization
             //--------------------------------------------------------------------------------------
-            int screenWidth = 800;
-            int screenHeight = 450;
+            int screenWidth = 640;
+            int screenHeight = 480;
 
-            rl.InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+            rl.InitWindow(screenWidth, screenHeight, "Tanks For Everything!");
 
+            game.Init();
             rl.SetTargetFPS(60);
             //--------------------------------------------------------------------------------------
 
             // Main game loop
             while (!rl.WindowShouldClose())    // Detect window close button or ESC key
             {
-                // Update
-                //----------------------------------------------------------------------------------
                 // TODO: Update your variables here
                 //----------------------------------------------------------------------------------
 
-                // Draw
-                //----------------------------------------------------------------------------------
-                rl.BeginDrawing();
+                game.Update();
+                game.Draw();
 
-                rl.ClearBackground(Color.RAYWHITE);
-
-                rl.DrawText("Congrats! You created your first window!", 190, 200, 20, Color.LIGHTGRAY);
-
-                rl.EndDrawing();
                 //----------------------------------------------------------------------------------
             }
 
             // De-Initialization
             //--------------------------------------------------------------------------------------
+            game.Shutdown();
+
             rl.CloseWindow();        // Close window and OpenGL context
                                      //--------------------------------------------------------------------------------------
 
