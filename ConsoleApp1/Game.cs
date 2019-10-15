@@ -15,7 +15,8 @@ namespace MatrixHeirarchy
         SceneObject turretObject = new SceneObject();
 
         SpriteObject tankSprite = new SpriteObject();
-        SpriteObject turretSprite = new SpriteObject();
+        SpriteObject turretSprite = new SpriteObject();
+
         private long currentTime = 0;
         private long lastTime = 0;
         private float timer = 0;
@@ -84,6 +85,14 @@ namespace MatrixHeirarchy
                tankObject.LocalTransform.x1,
                tankObject.LocalTransform.y1, 1) * deltaTime * -100;
                 tankObject.Translate(facing.x, facing.y);
+            }
+            if(rl.IsKeyDown(KeyboardKey.KEY_Q))
+            {
+                turretObject.Rotate(-deltaTime);
+            }
+            if(rl.IsKeyDown(KeyboardKey.KEY_E))
+            {
+                turretObject.Rotate(deltaTime);
             }
 
             tankObject.Update(deltaTime);
