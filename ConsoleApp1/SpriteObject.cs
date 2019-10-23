@@ -10,6 +10,7 @@ namespace MatrixHeirarchy
     {
         Texture2D texture = new Texture2D();
         Image image = new Image();
+        public float imgScale = 1;
 
         public float Width
         {
@@ -37,8 +38,7 @@ namespace MatrixHeirarchy
             rl.DrawTextureEx(
                 texture,
                 new Vector2(globalTransform.x3, globalTransform.y3),
-                rotation * (float)(180.0f / Math.PI),
-                1, Color.WHITE);
+                rotation * (float)(180.0f / Math.PI), imgScale, Color.WHITE);
         }
     }
 }

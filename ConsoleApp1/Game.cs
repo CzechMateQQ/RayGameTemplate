@@ -13,9 +13,12 @@ namespace MatrixHeirarchy
 
         SceneObject tankObject = new SceneObject();
         SceneObject turretObject = new SceneObject();
+        SceneObject bulletObject = new SceneObject();
 
         SpriteObject tankSprite = new SpriteObject();
         SpriteObject turretSprite = new SpriteObject();
+        SpriteObject bulletSprite = new SpriteObject();
+
 
         private long currentTime = 0;
         private long lastTime = 0;
@@ -36,15 +39,22 @@ namespace MatrixHeirarchy
             //Set offset for base to rotate around center
             tankSprite.SetPosition(-tankSprite.Width / 2.0f, tankSprite.Height / 2.0f);
 
+            bulletSprite.Load("tank_explosion5.png");
+            bulletSprite.SetRotate(90 * (float)(Math.PI / 180.0f));
+            bulletSprite.imgScale = 1.0f;
+
             turretSprite.Load("barrelBlue.png");
             turretSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
             //Set turret offset from tank base
             turretSprite.SetPosition(0, turretSprite.Width / 2.0f);
 
+            tankObject.SetPosition(rl.GetScreenWidth() / 2.0f, rl.GetScreenHeight() / 2.0f);
+
+            bulletObject.AddChild(bulletSprite);
             turretObject.AddChild(turretSprite);
             tankObject.AddChild(tankSprite);
+
             tankObject.AddChild(turretObject);
-            tankObject.SetPosition(rl.GetScreenWidth() / 2.0f, rl.GetScreenHeight() / 2.0f);
         }
 
         public void Shutdown()
@@ -95,9 +105,53 @@ namespace MatrixHeirarchy
                 turretObject.Rotate(deltaTime);
             }
 
-            tankObject.Update(deltaTime);
+            float xR = turretSprite.GlobalTransform.x1;
+            float yR = turretSprite.GlobalTransform.x2;
+            float rot = (float)Math.Atan2(xR, yR);
+
+            if (rl.IsKeyPressed(KeyboardKey.KEY_SPACE))
+            {
+                turretObject.AddChild(bulletObject);
+                bulletObject.active = true;
+                bulletObject.SetPosition(65, -5.5f);
+
+                float xPos = bulletObject.GlobalTransform.x3;
+                float yPos = bulletObject.GlobalTransform.y3;
+
+                float xDir = xPos - turretSprite.GlobalTransform.x3;
+                float yDir = yPos - turretSprite.GlobalTransform.y3;
+
+                float mag = (float)Math.Sqrt(xDir * xDir + yDir * yDir);
+                xDir /= mag;
+                yDir /= mag;
+
+
+                // unparent the bullet from the tank
+                turretObject.RemoveChild(bulletObject);
+
+                // restore the transform data
+                bulletObject.SetRotate(rot);
+                bulletObject.SetPosition(xPos, yPos);
+            }
+
+            if (bulletObject.GlobalTransform.x3 > 630 || bulletObject.GlobalTransform.x3 < 10 || bulletObject.GlobalTransform.y3 > 470 || bulletObject.GlobalTransform.y3 < 10)
+            {
+                bulletObject.active = false;
+            }
 
             lastTime = currentTime;
+
+            if (bulletObject.active)
+            {
+                bulletSprite.Draw();
+
+                Vector3 facing = new Vector3(
+                bulletObject.GlobalTransform.x1,
+                bulletObject.GlobalTransform.y1, 1) 
+                * deltaTime * 250;
+
+                bulletObject.Translate(facing.x, facing.y);
+            }
         }
 
         public void Draw()
@@ -113,3 +167,4 @@ namespace MatrixHeirarchy
         }
     }
 }
+

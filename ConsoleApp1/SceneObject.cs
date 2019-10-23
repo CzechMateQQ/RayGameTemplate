@@ -15,6 +15,8 @@ namespace MatrixHeirarchy
         protected Matrix3 localTransform = new Matrix3();
         protected Matrix3 globalTransform = new Matrix3();
 
+        public bool active = true;
+
         public Matrix3 LocalTransform
         {
             get { return localTransform; }
@@ -151,11 +153,15 @@ namespace MatrixHeirarchy
         }
     }
 
+    // COLUMN-MAJOR
     public class Matrix3
     {
         public float x1, y1, z1, 
                      x2, y2, z2, 
                      x3, y3, z3;
+
+
+ 
         public Matrix3(float a1, float b1, float c1, float a2, float b2, float c2, float a3, float b3, float c3)
         {
             x1 = a1; y1 = b1; z1 = c1;
@@ -172,6 +178,8 @@ namespace MatrixHeirarchy
 
         public static Matrix3 operator *(Matrix3 m1, Matrix3 m2)
         {
+            // row-major format
+
             return new Matrix3(
                 m1.x1 * m2.x1 + m1.x2 * m2.y1 + m1.x3 * m2.z1,
                 m1.y1 * m2.x1 + m1.y2 * m2.y1 + m1.y3 * m2.z1,
@@ -183,6 +191,22 @@ namespace MatrixHeirarchy
                 m1.y1 * m2.x3 + m1.y2 * m2.y3 + m1.y3 * m2.z3,
                 m1.z1 * m2.x3 + m1.z2 * m2.y3 + m1.z3 * m2.z3);
         }
+
+        //public static Matrix3 operator *(Matrix3 m1, Matrix3 m2)
+        //{
+        //    // column-major format
+
+        //    return new Matrix3(
+        //        m1.x1 * m2.x1 + m1.y1 * m2.x2 + m1.z1 * m2.x3,
+        //        m1.x1 * m2.y1 + m1.y1 * m2.y2 + m1.z1 * m2.y3,
+        //        m1.x1 * m2.z1 + m1.y1 * m2.z2 + m1.z1 * m2.z3,
+        //        m1.x2 * m2.x1 + m1.y2 * m2.x2 + m1.z2 * m2.x3,
+        //        m1.x2 * m2.y1 + m1.y2 * m2.y2 + m1.z2 * m2.y3,
+        //        m1.x2 * m2.z1 + m1.y2 * m2.z2 + m1.z2 * m2.z3,
+        //        m1.x3 * m2.x1 + m1.y3 * m2.x2 + m1.z3 * m2.x3,
+        //        m1.x3 * m2.y1 + m1.y3 * m2.y2 + m1.z3 * m2.y3,
+        //        m1.x3 * m2.z1 + m1.y3 * m2.z2 + m1.z3 * m2.z3);
+        //}
 
         public void Set(Matrix3 input)
         {
@@ -212,7 +236,7 @@ namespace MatrixHeirarchy
 
         public void SetTranslation(float x, float y)
         {
-            x3 = x; y3= y; z3 = 1;
+            x3 = x; y3 = y; z3 = 1;
         }
 
         public void Translate(float x, float y)
@@ -222,9 +246,9 @@ namespace MatrixHeirarchy
 
         public void SetRotateZ(double radians)
         {
-            Set(new Matrix3((float)Math.Cos(radians), (float)Math.Sin(radians), 0,
-                (float)-Math.Sin(radians), (float)Math.Cos(radians), 0,
-                0, 0, 1));
+            Set(new Matrix3((float)Math.Cos(radians),  (float)Math.Sin(radians), 0,
+                            (float)-Math.Sin(radians), (float)Math.Cos(radians), 0,
+                            x3,                         y3,                        1));
         }
 
         public void RotateZ(double radians)
