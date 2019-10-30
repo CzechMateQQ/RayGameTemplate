@@ -11,6 +11,7 @@ namespace MatrixHeirarchy
     {
         Stopwatch stopwatch = new Stopwatch();
 
+        //Initialize game objects
         SceneObject tankObject = new SceneObject();
         SceneObject turretObject = new SceneObject();
         SceneObject bulletObject = new SceneObject();
@@ -19,7 +20,7 @@ namespace MatrixHeirarchy
         SpriteObject turretSprite = new SpriteObject();
         SpriteObject bulletSprite = new SpriteObject();
 
-
+        //Initialize object variables
         private long currentTime = 0;
         private long lastTime = 0;
         private float timer = 0;
@@ -33,6 +34,7 @@ namespace MatrixHeirarchy
             stopwatch.Start();
             lastTime = stopwatch.ElapsedMilliseconds;
 
+            //Load sprites
             tankSprite.Load("tankBlue_outline.png");
             //Face tank the right way
             tankSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
@@ -50,6 +52,7 @@ namespace MatrixHeirarchy
 
             tankObject.SetPosition(rl.GetScreenWidth() / 2.0f, rl.GetScreenHeight() / 2.0f);
 
+            //Attach children
             bulletObject.AddChild(bulletSprite);
             turretObject.AddChild(turretSprite);
             tankObject.AddChild(tankSprite);
@@ -74,6 +77,7 @@ namespace MatrixHeirarchy
             }
             frames++;
 
+            //Keyboard presses
             if (rl.IsKeyDown(KeyboardKey.KEY_A))
             {
                 tankObject.Rotate(-deltaTime);
@@ -117,15 +121,7 @@ namespace MatrixHeirarchy
 
                 float xPos = bulletObject.GlobalTransform.x3;
                 float yPos = bulletObject.GlobalTransform.y3;
-
-                float xDir = xPos - turretSprite.GlobalTransform.x3;
-                float yDir = yPos - turretSprite.GlobalTransform.y3;
-
-                float mag = (float)Math.Sqrt(xDir * xDir + yDir * yDir);
-                xDir /= mag;
-                yDir /= mag;
-
-
+      
                 // unparent the bullet from the tank
                 turretObject.RemoveChild(bulletObject);
 
@@ -133,7 +129,8 @@ namespace MatrixHeirarchy
                 bulletObject.SetRotate(rot);
                 bulletObject.SetPosition(xPos, yPos);
             }
-
+            
+            //Collision boundaries
             if (bulletObject.GlobalTransform.x3 > 630 || bulletObject.GlobalTransform.x3 < 10 || bulletObject.GlobalTransform.y3 > 470 || bulletObject.GlobalTransform.y3 < 10)
             {
                 bulletObject.active = false;

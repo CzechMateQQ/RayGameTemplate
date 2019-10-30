@@ -44,32 +44,40 @@ namespace MatrixHeirarchy
             }
         }
 
+        //Set object position
         public void SetPosition(float x, float y)
         {
             localTransform.SetTranslation(x, y);
             UpdateTransform();
         }
 
+        //Set object rotation
         public void SetRotate(float radians)
         {
             localTransform.SetRotateZ(radians);
             UpdateTransform();
         }
+
+        //Set object scale
         public void SetScale(float width, float height)
         {
             localTransform.SetScaled(width, height, 1);
             UpdateTransform();
         }
+
+        //Set object translation
         public void Translate(float x, float y)
         {
             localTransform.Translate(x, y);
             UpdateTransform();
         }
+
         public void Rotate(float radians)
         {
             localTransform.RotateZ(radians);
             UpdateTransform();
         }
+
         public void Scale(float width, float height)
         {
             localTransform.Scale(width, height, 1);
@@ -104,6 +112,7 @@ namespace MatrixHeirarchy
             return children[index];
         }
 
+        //Connect child to parent
         public void AddChild(SceneObject child)
         {
             //Make sure child doesn't already have a parent
@@ -114,6 +123,7 @@ namespace MatrixHeirarchy
             children.Add(child);
         }
 
+        //Remove child from parent
         public void RemoveChild(SceneObject child)
         {
             if(children.Remove(child) == true)
@@ -161,7 +171,6 @@ namespace MatrixHeirarchy
                      x3, y3, z3;
 
 
- 
         public Matrix3(float a1, float b1, float c1, float a2, float b2, float c2, float a3, float b3, float c3)
         {
             x1 = a1; y1 = b1; z1 = c1;
@@ -178,7 +187,8 @@ namespace MatrixHeirarchy
 
         public static Matrix3 operator *(Matrix3 m1, Matrix3 m2)
         {
-            // row-major format
+            //row-major format
+            //Matrix multiplication
 
             return new Matrix3(
                 m1.x1 * m2.x1 + m1.x2 * m2.y1 + m1.x3 * m2.z1,
